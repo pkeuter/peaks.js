@@ -154,6 +154,7 @@ define([
         var outOffset = thisSeg.view.frameOffset + thisSeg.outMarker.getX();
         segment.endTime = thisSeg.view.data.time(outOffset);
       }
+	  peaks.emit("segments.handle_dragged", segment);
 
       updateSegmentWaveform(segment);
     };
