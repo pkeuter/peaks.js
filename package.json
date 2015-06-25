@@ -15,7 +15,6 @@
   },
   "browser": {
     "EventEmitter": "eventemitter2",
-    "Kinetic": "kinetic",
     "peaks/player/player": "./src/main/player/player.js",
     "peaks/player/player.keyboard": "./src/main/player/player.keyboard.js",
     "peaks/waveform/waveform.axis": "./src/main/waveform/waveform.axis.js",
@@ -37,6 +36,7 @@
   "license": "LGPL 3",
   "scripts": {
     "build": "browserify -d ./src/main.js -p [minifyify --map peaks.min.map --output peaks.min.map] -s peaks -o peaks.min.js",
+    "build-max": "browserify ./src/main.js -s peaks -o peaks.js",
     "test": "npm run test-pre && ./node_modules/karma/bin/karma start --single-run",
     "test-pre": "jshint ./src",
     "test-watch": "./node_modules/karma/bin/karma start --auto-watch --no-single-run",
@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "eventemitter2": "^0.4.14",
-    "kinetic": "^5.0.6",
+    "konva": "~0.9.5",
     "waveform-data": "^1.4.3"
   },
   "optionalDependencies": {

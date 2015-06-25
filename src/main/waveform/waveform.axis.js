@@ -6,7 +6,7 @@
  * instantiated meaning this code is reused multiple times.
  *
  */
-define(["peaks/waveform/waveform.mixins", "Kinetic"], function (mixins, Kinetic) {
+define(["peaks/waveform/waveform.mixins", "konva"], function (mixins, Konva) {
   'use strict';
 
   /*
@@ -29,13 +29,13 @@ define(["peaks/waveform/waveform.mixins", "Kinetic"], function (mixins, Kinetic)
   function WaveformAxis(view) {
     this.view = view; // store reference to waveform view object
 
-    this.axisShape = new Kinetic.Shape({
+    this.axisShape = new Konva.Shape({
       fill: 'rgba(38, 255, 161, 1)',
       strokeWidth: 0,
       opacity: 1
     });
 
-    this.axisShape.setDrawFunc(this.axisDrawFunction.bind(this, view));
+    this.axisShape.sceneFunc(this.axisDrawFunction.bind(this, view));
 
     this.view.uiLayer.add(this.axisShape);
   }
@@ -76,7 +76,7 @@ define(["peaks/waveform/waveform.mixins", "Kinetic"], function (mixins, Kinetic)
   /**
    *
    * @param {WaveformOverview|WaveformZoomview} view
-   * @param {Kinetic.Context} context
+   * @param {Konva.Context} context
    */
   WaveformAxis.prototype.axisDrawFunction = function (view, context) {
     var currentFrameStartTime = view.data.time(view.frameOffset);
@@ -96,14 +96,14 @@ define(["peaks/waveform/waveform.mixins", "Kinetic"], function (mixins, Kinetic)
     // Distance between waveform start time and first axis marker (pixels)
     var axisLabelOffsetPixels = this.view.data.at_time(axisLabelOffsetSecs);
 
-    context.strokeStyle = "#ccc";
-    context.lineWidth = 1;
+    context.setAttr('strokeStyle', this.view.options.axisGridlineColor);
+    context.setAttr('lineWidth', 1);
 
     // Set text style
-    context.font = "11px sans-serif";
-    context.fillStyle = "#aaa";
-    context.textAlign = "left";
-    context.textBaseline = "bottom";
+    context.setAttr('font', "11px sans-serif");
+    context.setAttr('fillStyle', this.view.options.axisLabelColor);
+    context.setAttr('textAlign', "left");
+    context.setAttr('textBaseline', "bottom");
 
     var secs = firstAxisLabelSecs;
     var x;
@@ -125,7 +125,7 @@ define(["peaks/waveform/waveform.mixins", "Kinetic"], function (mixins, Kinetic)
       context.stroke();
 
       var label      = mixins.niceTime(secs, true);
-      var labelWidth = context._context.measureText(label).width; // todo handle this with Kinetic.Text
+      var labelWidth = context._context.measureText(label).width; // todo handle this with Konva.Text
       var labelX     = x - labelWidth / 2;
       var labelY     = this.view.height - 1 - markerHeight;
 
